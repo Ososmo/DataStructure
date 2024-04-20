@@ -41,7 +41,7 @@ public:
     }
 
     t Top() const {
-        return top->val;
+        return !isEmpty() ? top->data : throw out_of_range("Stack is Empty!");
     }
     int size() const {
         return siz;
