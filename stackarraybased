@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+#include <stdexcept>
+using namespace std;
+
+template<class t>
+class Stack {
+private:
+    int siz = 5;
+    int Top;
+    t *items = new t[siz];
+public:
+    Stack() : Top(-1) {}
+
+    void push(t element) {
+        if (Top >= siz) {
+            t *temp = new t[siz * 2];
+            for (int i = 0; i <= Top; ++i) {
+                temp[i] = items[i];
+            }
+            swap(items, temp);
+            delete[] temp;
+            siz *= 2;
+            Top++;
+            items[Top] = element;
+        } else {
+            Top++;
+            items[Top] = element;
+        }
+    }
+
+    bool is_empty() const {
+        return Top < 0;
+    }
+
+    void pop() {
+        if (is_empty()) {
+            throw out_of_range("Stack is empty");
+        } else {
+            Top--;
+        }
+    }
+
+    void top() {
+        if (!is_empty()) {
+            cout << items[Top] << "\n";
+        }
+    }
+
+    int size() {
+        return Top + 1;
+    }
+
+    void print() {
+        for (int i = Top; i >= 0; i--)
+            cout << items[i] << " ";
+        cout << "\n";
+
+    }
+};
+int main() {
+    Stack<int>s;
+
+
+    return 0;
+}
