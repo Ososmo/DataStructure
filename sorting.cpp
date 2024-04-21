@@ -29,7 +29,8 @@ int numberOfComparisons = 0;
 void Merge(Student students[],int numStudents,int x);
 int mergeSort(Student students[], int start, int end,int x);
 int merge(Student students[], int l, int mid, int r,int x);
-
+void countSort(Student input[],int numStudents);
+void count(Student students[],int numStudents);
 
 int main() {
     ifstream inputFile("input.txt");
@@ -50,9 +51,9 @@ int main() {
     }
     inputFile.close();
 
-
+    
     Merge(students,numberOfStudents,1);
-
+    Count(students,numberOfStudents);
 
     return 0;
 }
@@ -65,7 +66,7 @@ void Merge(Student students[],int numStudents,int x)
         outputFile.open("SortedByGPA.txt");
 
     auto start = chrono::high_resolution_clock::now();
-    numberOfComparisons = mergeSort(students, 0, numStudents - 1,x);
+    int numberOfComparisons = mergeSort(students, 0, numStudents - 1,x);
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> duration =end-start;
     outputFile << "Merge Sort\n";
@@ -134,4 +135,42 @@ int merge(Student students[], int l, int mid, int r,int x) {
     }
 
     return comparisons;
+}
+void countSort(Student input[],int numStudents){
+    int arr[405]{};
+    Student ans[numStudents];
+    for(int i=0;i<numStudents;i++){
+        arr[(int)(input[i].getGpa*100)]++;
+    }
+    for(int i=1;i<405;i++)arr[i]=arr[i]+arr[i-1];
+
+    for(int i=0;i<numStudents;i++){
+        ans[--arr[(int)(input[i].getGpa()*100)]]=input[i];
+    }
+    return ans;
+}
+
+void count(Student students[],int numStudents)
+{
+    ofstream outputFile;
+    
+    outputFile.open("SortedByGPA.txt");
+
+    auto start = chrono::high_resolution_clock::now();
+     
+     countSort(students,numStudents);
+    
+    auto end = chrono::high_resolution_clock::now();
+     
+    int numberOfComparisons = 0;
+    chrono::duration<double> duration =end-start;
+    outputFile << "Count Sort\n";
+    outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "numStudents";
+    outputFile << "Sorted Student Elements:\n";
+    for (int i = 0; i < numStudents; ++i) {
+        outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
+    }
+
+    outputFile.close();
 }
