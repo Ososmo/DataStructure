@@ -1,21 +1,26 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<algorithm>
 using namespace std;
 
 template<class T>
 class queue{
 private:
-    const int lastIndex=10000;
-    T arr[lastIndex];
+     long long lastIndex=10000;
+    T *arr=new T[lastIndex];
     int start=0;
     int end=0;
     int size=0;
     void handleQueue(){
+        lastIndex=2*lastIndex;
+        T *temp=new T[lastIndex];
         int pos=0;
         for(int i=start;i<=end;i++){
-            arr[pos]=arr[i];
-            arr[i]=NULL;
+            temp[pos]=arr[i];
             pos++;
         }
+        T *exTemp=arr;
+        arr=temp;
+        delete []exTemp;
 
     }
 public:
@@ -23,8 +28,7 @@ public:
     void enque(T ob){
 
         if(size==lastIndex){
-            cout<<"Queue is full!"<<endl;
-            return ;
+            handleQueue();
         }
         arr[end++]=ob;
         size++;
@@ -41,7 +45,7 @@ public:
 
     }
     T first(){
-
+        return arr[start];
     }
     bool isEmpty(){
         return size==0;
@@ -74,6 +78,6 @@ public:
 };
 int main(){
     queue<int>q;
-  
+
     return 0;
 }
