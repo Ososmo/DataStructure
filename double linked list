@@ -1,0 +1,138 @@
+template <class t>
+class double_linked_list {
+    struct nodeType {
+        t info;
+        nodeType *next;
+        nodeType *back;
+    };
+    nodeType *head,*tail;
+    int size;
+public:
+    double_linked_list(){
+        head =  nullptr;tail = nullptr;size = 0;
+    }
+    void insertAtHead(t element){
+        nodeType *newn=new nodeType;
+        newn->value=element;
+        if (head == nullptr){
+            newn->prev=newn->next= nullptr;
+            head = tail =newn;
+        }
+        else{
+            newn->next=head;
+            head->prev=newn;
+            newn->prev= nullptr;
+            head=newn;
+        }
+        size++;
+    }
+    void insertAtTail(t element){
+        nodeType *newn=new nodeType;
+        newn->value=element;
+        if (head == nullptr){
+            newn->prev=newn->next= nullptr;
+            head =tail =newn;
+        }
+        else{
+            newn->prev=tail;
+            newn->next= nullptr;
+            tail->next=newn;
+            tail=newn;
+        }
+        size++;
+    }
+    void insertAT(t element,int index){
+        if (index < 0 || index >= size) cout << "invalid index\n";
+        else if(index == 0) insertAtHead(element);
+        else if(index == size - 1) insertAtTail(element);
+        else{
+            nodeType *newn = new nodeType,*temp = head;
+            for (int i = 0; i < index; ++i) {
+                temp = temp->next;
+            }
+            newn->next=temp->next;
+            newn->back = temp;
+            newn->next->back = newn;
+            temp->next = newn;
+            size++;
+        }
+    }
+    void removeAtHead(){
+        if (head == nullptr) cout << "list is already empty";
+        else{
+            nodeType *temp=head;
+            head=head->next;
+            delete temp;
+            head->prev= nullptr;
+            size--;
+        }
+    }
+    void removeAtTail(){
+        if (head == nullptr) cout << "list is already empty";
+        else{
+            nodeType *temp=tail;
+            tail=tail->prev;
+            delete temp;
+            tail->next= nullptr;
+            size--;
+        }
+    }
+    void removeAT(int index) {
+        if (index < 0 || index >= size){
+            cout << "invalid index\n";
+        } else if (index == 0) {
+            removeAtHead();
+        } else if (index == size - 1) {
+            removeAtTail();
+        } else {
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            temp->next->back = temp->back;
+            temp->next->next = temp->next;
+            delete temp;
+            size--;
+        }
+    }
+        bool isEmpty(){
+            return head == nullptr;
+        }
+        int doubleLinkedListSize(){
+            return size;
+        }
+    t retrieveAt(int index) {
+        if (index < 0 || index >= size) cout << "invalid index\n";
+        else if (index == 0)return head->info;
+        else if (index == size - 1)return tail->info;
+        else{
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            return temp->info;
+
+        }
+    }
+    void print() const
+    {
+        nodeType *current; //pointer to traverse the list
+        current = head; //set current to point to the first node
+        while (current != nullptr){
+             cout << current->info << " "; //output info
+             current = current->next;
+                }
+    }
+    void clear()
+    {
+        nodeType *temp; //pointer to delete the node
+        while (head != nullptr)
+        {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+        tail = nullptr;
+        size = 0;
+    }
+};
