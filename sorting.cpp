@@ -31,6 +31,10 @@ int mergeSort(Student students[], int start, int end,int x);
 int merge(Student students[], int l, int mid, int r,int x);
 void countSort(Student input[],int numStudents);
 void count(Student students[],int numStudents);
+int partition_byGPA( Student students[],int l,int h);
+void quiksort_byGPA( Student students[],int l ,int h);
+int partition_byName( Student students[],int l,int h);
+void quiksort_byName( Student students[],int l ,int h);
 
 int main() {
     ifstream inputFile("input.txt");
@@ -174,7 +178,23 @@ void count(Student students[],int numStudents)
 
     outputFile.close();
 }
-
+int partition_byGPA( Student students[],int l,int h){
+    Student p = students[l];
+    int i = l;
+    int j = h;
+    while (i < j){
+        do {
+            i++;
+        } while (students[i].getGpa() <= p.getGpa());
+        do {
+            j--;
+        } while (students[j].getGpa() > p.getGpa());
+        if (i < j)
+            swap(students[i],students[j]);
+    }
+    swap(students[l],students[j]);
+    return j;
+};
 void quiksort_byGPA( Student students[],int l ,int h){
     if (l < h){
         int piv = partition_byGPA(students,l,h);
