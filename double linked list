@@ -136,3 +136,32 @@ public:
         size = 0;
     }
 };
+    void replaceAt (t newElement, int index){
+        if (index < 0 || index >= size){
+            cout << "invalid index\n";
+        } else if (index == 0) {
+            head->info = newElement;
+        } else if (index == size - 1) {
+            tail->info = newElement;
+        } else {
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            temp->info = newElement;
+        }
+    }
+    bool isExist (t  element){
+        nodeType* temp = head;
+        for (int i = 0; i < size; ++i) {
+            if (temp->info == element)return true;
+            temp = temp->next;
+        }
+    }
+    bool isItemAtEqual (t  element, int index){
+        nodeType* temp = head;
+        for (int i = 0; i < index; ++i) {
+            temp = temp->next;
+        }
+        return temp->info == element;
+    }
