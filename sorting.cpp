@@ -174,3 +174,34 @@ void count(Student students[],int numStudents)
 
     outputFile.close();
 }
+
+void quiksort_byGPA( Student students[],int l ,int h){
+    if (l < h){
+        int piv = partition_byGPA(students,l,h);
+        quiksort_byGPA(students,l,piv);
+        quiksort_byGPA(students,piv+1,h);
+    }
+    int partition_byName( Student students[],int l,int h){
+        Student p = students[l];
+        int i = l;
+        int j = h;
+        while (i < j){
+            do {
+                i++;
+            } while (students[i].getName() <= p.getName());
+            do {
+                j--;
+            } while (students[j].getName() > p.getName());
+            if (i < j)
+                swap(students[i],students[j]);
+        }
+        swap(students[l],students[j]);
+        return j;
+    }
+    void quiksort_byName( Student students[],int l ,int h){
+        if (l < h){
+            int piv = partition_byName(students,l,h);
+            quiksort_byName(students,l,piv);
+            quiksort_byName(students,piv+1,h);
+        }
+}
