@@ -35,7 +35,15 @@ int partition_byGPA( Student students[],int l,int h);
 void quiksort_byGPA( Student students[],int l ,int h);
 int partition_byName( Student students[],int l,int h);
 void quiksort_byName( Student students[],int l ,int h);
-
+void Selection(Student students[],int numStudents,int x);
+int selectionSort(Student students[], int start, int end,int x);
+int selection(Student students[], int l, int mid);
+void Insertion(Student students[],int numStudents,int x);
+int insertionSort(Student students[], int start, int end,int x);
+int insertion(Student students[], int l, int mid);
+void Bubble(Student students[],int numStudents,int x);
+int bubbleSort(Student students[], int start, int end,int x);
+int bubble(Student students[], int l, int mid);
 int main() {
     ifstream inputFile("input.txt");
     int numberOfStudents;
@@ -58,7 +66,9 @@ int main() {
     
     Merge(students,numberOfStudents,1);
     Count(students,numberOfStudents);
-
+    Selection(students,numberOfStudents,1);
+    Insertion(students,numberOfStudents,1);
+    Bubble(students,numberOfStudents,1);
     return 0;
 }
 void Merge(Student students[],int numStudents,int x)
@@ -224,4 +234,204 @@ void quiksort_byGPA( Student students[],int l ,int h){
             quiksort_byName(students,l,piv);
             quiksort_byName(students,piv+1,h);
         }
+}
+int selectionSort(Student students[], int size,int x) {
+    int comparisons = 0;
+    comparisons += selection(students, size, x);
+    return comparisons;
+}
+void Selection(Student students[],int numStudents,int x)
+{
+    ofstream outputFile;
+    if(!x)
+        outputFile.open("SortedByName.txt");
+    else
+        outputFile.open("SortedByGPA.txt");
+
+    auto start = chrono::high_resolution_clock::now();
+    int numberOfComparisons = selectionSort(students, numStudents,x);
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration =end-start;
+    outputFile << "Selection Sort\n";
+    outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Sorted Student Elements:\n";
+    for (int i = 0; i < numStudents; ++i) {
+        outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
+    }
+
+    outputFile.close();
+}
+int selection(Student students[],int size,int x) {
+    int comparisons = 0;
+    string name,id;
+    double gpa;
+    if (x)
+    {
+        int i, j, minIndex;
+        double tmp;
+        for (i = 0; i < size - 1; i++) {
+            minIndex = i;
+            for (j = i + 1; j < size; j++){
+                if (students[j].getGpa() < students[minIndex].getGpa())
+                    minIndex = j;
+                comparisons++;
+            }
+            if (minIndex != i) {
+                name = students[minIndex].getName();
+                id = students[minIndex].getId();
+                tmp = students[i].getGpa();
+                students[i] = students[minIndex];
+                students[minIndex] = Student(name,id,tmp);
+            }
+        }
+    }
+    else
+    {
+        int i, j, minIndex;
+        string tmp;
+        for (i = 0; i < size - 1; i++) {
+            minIndex = i;
+            for (j = i + 1; j < size; j++){
+                if (students[j].getName() < students[minIndex].getName())
+                    minIndex = j;
+                comparisons++;
+            }
+            if (minIndex != i) {
+                id = students[minIndex].getId();
+                gpa = students[minIndex].getGpa();
+                tmp = students[i].getName();
+                students[i] = students[minIndex];
+                students[minIndex] = Student(tmp,id,gpa);
+            }
+        }
+    }
+    return comparisons;
+}
+int insertionSort(Student students[], int size,int x) {
+    int comparisons = 0;
+    comparisons += insertion(students, size, x);
+    return comparisons;
+}
+void Insertion(Student students[],int numStudents,int x)
+{
+    ofstream outputFile;
+    if(!x)
+        outputFile.open("SortedByName.txt");
+    else
+        outputFile.open("SortedByGPA.txt");
+
+    auto start = chrono::high_resolution_clock::now();
+    int numberOfComparisons = insertionSort(students, numStudents,x);
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration =end-start;
+    outputFile << "Insertion Sort\n";
+    outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Sorted Student Elements:\n";
+    for (int i = 0; i < numStudents; ++i) {
+        outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
+    }
+
+    outputFile.close();
+}
+int insertion(Student students[],int size,int x) {
+    int comparisons = 0;
+    string name,id;
+    double gpa;
+    if (x)
+    {
+        int i, j;
+        double tmp;
+        for (i = 1; i < size; i++) {
+            j = i;
+            while (j > 0 && students[j - 1].getGpa() > students[j].getGpa()) {
+                comparisons++;
+                string name ,id ;
+                name = students[j-1].getName();
+                id = students[j-1].getId();
+                tmp = students[j].getGpa();
+                students[j] = students[j - 1];
+                students[j - 1] = Student(name,id,tmp);
+                j--;
+            }
+        }
+    }
+    else
+    {
+        int i, j;
+        string tmp;
+        for (i = 1; i < size; i++) {
+            j = i;
+            while (j > 0 && students[j - 1].getName() > students[j].getName()) {
+                comparisons++;
+                string id ;
+                double gpa;
+                gpa = students[j-1].getGpa();
+                id = students[j-1].getId();
+                tmp = students[j].getName();
+                students[j] = students[j - 1];
+                students[j - 1] = Student(tmp,id,gpa);
+                j--;
+            }
+        }
+    }
+    return comparisons;
+}
+int bubbleSort(Student students[], int size,int x) {
+    int comparisons = 0;
+    comparisons += bubble(students, size, x);
+    return comparisons;
+}
+void Bubble(Student students[],int numStudents,int x)
+{
+    ofstream outputFile;
+    if(!x)
+        outputFile.open("SortedByName.txt");
+    else
+        outputFile.open("SortedByGPA.txt");
+
+    auto start = chrono::high_resolution_clock::now();
+    int numberOfComparisons = bubbleSort(students, numStudents,x);
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration =end-start;
+    outputFile << "Bubble Sort\n";
+    outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Sorted Student Elements:\n";
+    for (int i = 0; i < numStudents; ++i) {
+        outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
+    }
+
+    outputFile.close();
+}
+int bubble(Student students[],int size,int x) {
+    int comparisons = 0;
+    if (x)
+    {
+        for (int i = 0; i < size - 1; i++)
+        {
+            for (int j = size - 1; j > i; --j)
+            {
+                comparisons++;
+                if (students[j].getGpa() < students[j - 1].getGpa())
+                    swap(students[j], students[j - 1]);
+
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < size - 1; i++)
+        {
+            for (int j = size - 1; j > i; --j)
+            {
+                comparisons++;
+                if (students[j].getName() < students[j - 1].getName())
+                    swap(students[j], students[j - 1]);
+
+            }
+        }
+    }
+    return comparisons;
 }
