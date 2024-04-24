@@ -166,7 +166,75 @@ void replaceAt (t newElement, int index){
         }
         return temp->info == element;
     }
+void Swap (int firstItemIdx, int secondItemIdx) {
+        if (firstItemIdx < 0 || firstItemIdx >= size || secondItemIdx < 0 || secondItemIdx >= size) {
+            cout << "invalid index\n";
+        }
+        nodeType *temp1 = head, *temp2 = head;
+        if (firstItemIdx == secondItemIdx)return;
+        else {
+            for (int i = 0; i < firstItemIdx; ++i) {
+                temp1 = temp1->next;
+            }
+            for (int i = 0; i < secondItemIdx; ++i) {
+                temp2 = temp2->next;
+            }
+        }
+        if (firstItemIdx > secondItemIdx) swap(secondItemIdx,firstItemIdx);
+        if (temp1->next == temp2) {
+            nodeType *temp = temp1->prev;
+            if (temp != nullptr) {
+                temp->next = temp2;
+            } else {
+                head = temp2;
+            }
+            temp2->prev = temp;
+            temp1->prev = temp2;
+            temp1->next = temp2->next;
+            if (temp2->next != nullptr) {
+                temp2->next->prev = temp1;
+            }
+            temp2->next = temp1;
+        }
+        else {
+            nodeType *tempPrev1 = temp1->prev;
+            nodeType *tempNext1 = temp1->next;
+            nodeType *tempPrev2 = temp2->prev;
+            nodeType *tempNext2 = temp2->next;
+
+            if (tempPrev1 != nullptr) {
+                tempPrev1->next = temp2;
+            } else {
+                head = temp2;
+            }
+            if (tempNext1 != nullptr) {
+                tempNext1->prev = temp2;
+            }
+            if (tempPrev2 != nullptr) {
+                tempPrev2->next = temp1;
+            }
+            if (tempNext2 != nullptr) {
+                tempNext2->prev = temp1;
+            }
+
+            temp1->prev = tempPrev2;
+            temp1->next = tempNext2;
+            temp2->prev = tempPrev1;
+            temp2->next = tempNext1;
+        }
+    }
+
 };
+int main() {
+    double_linked_list<int> list;
+    list.insertAtHead(33);
+    list.insertAtTail(44);
+    list.insertAT(12,1);
+    list.insertAT(11,0);
+    list.Swap(0,3);
+    list.print();
+}
+
     
 
 
