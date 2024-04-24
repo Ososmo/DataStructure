@@ -229,7 +229,6 @@ int main() {
     list.insertAtHead(33);
     list.insertAtTail(44);
     list.insertAT(12,1);
-    list.insertAT(11,0);
     list.Swap(0,3);
     list.print();
 }
