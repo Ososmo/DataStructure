@@ -1,3 +1,5 @@
+#include<bits/stdc++.h>
+using namespace std;
 template <class t>
 class double_linked_list {
     struct nodeType {
@@ -135,8 +137,7 @@ public:
         tail = nullptr;
         size = 0;
     }
-};
-    void replaceAt (t newElement, int index){
+void replaceAt (t newElement, int index){
         if (index < 0 || index >= size){
             cout << "invalid index\n";
         } else if (index == 0) {
@@ -165,3 +166,7 @@ public:
         }
         return temp->info == element;
     }
+};
+    
+
+
