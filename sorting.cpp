@@ -22,13 +22,16 @@ public:
     const string &getId() const {
         return id;
     }
+    bool operator<(const Student& other) const {
+        return name < other.name;
+    }
 };
 
 int numberOfComparisons = 0;
 void Merge(Student students[],int numStudents,int x);
 int mergeSort(Student students[], int start, int end,int x);
 int merge(Student students[], int l, int mid, int r,int x);
-void quiksort(Student students[],int x);
+void Quiksort(Student students[],int numberofstudent ,int x);
 int partition_byGPA( Student students[],int l,int h);
 int  quiksort_byGPA( Student students[],int l ,int h);
 int partition_byName(Student students[], int l, int h);
@@ -62,8 +65,8 @@ int main() {
     inputFile.close();
 
 
-    Bubble(students,numberOfStudents,0);
-
+    Quiksort(students,numberOfStudents,0);
+    Quiksort(students,numberOfStudents,1);
     return 0;
 }
 void Merge(Student students[],int numStudents,int x)
@@ -146,11 +149,8 @@ int merge(Student students[], int l, int mid, int r,int x) {
     return comparisons;
 }
 
-void quiksort_byGPA(Student students[],int x)
-{
 
-}
-void quiksort(Student students[],int numStudents,int x){
+void Quiksort(Student students[],int numStudents,int x){
     ofstream outputFile;
     if(!x)
         outputFile.open("SortedByName.txt");
