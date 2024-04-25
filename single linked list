@@ -1,0 +1,234 @@
+#include<bits/stdc++.h>
+using namespace std;
+template <class t>
+class single_linked_list {
+    struct nodeType {
+        t value;
+        nodeType *next;
+    };
+    nodeType *head,*tail;
+    int size;
+public:
+    single_linked_list(){
+        head =  nullptr;tail = nullptr;size = 0;
+    }
+    void insertAtHead(t element){
+        nodeType *newn=new nodeType;
+        newn->value=element;
+        if (head == nullptr){
+            newn->next= nullptr;
+            head = tail =newn;
+        }
+        else{
+            newn->next=head;
+            head=newn;
+        }
+        size++;
+    }
+    void insertAtTail(t element){
+        nodeType *newn=new nodeType;
+        newn->value=element;
+        if (head == nullptr){
+            head =tail =newn;
+        }
+        else{
+            newn->next= nullptr;
+            tail->next=newn;
+            tail=newn;
+        }
+        size++;
+    }
+    void insertAT(t element,int index){
+        if (index < 0 || index >= size) cout << "invalid index\n";
+        else if(index == 0) insertAtHead(element);
+        else if(index == size ) insertAtTail(element);
+        else{
+            nodeType *newn = new nodeType,*temp = head;
+            for (int i = 0; i < index-1; ++i) {
+                temp = temp->next;
+            }
+            newn->value=element;
+            newn->next=temp->next;
+            temp->next = newn;
+            size++;
+        }
+    }
+    void removeAtHead(){
+        if (head == nullptr) cout << "list is already empty";
+        else{
+            nodeType *temp=head;
+            head=head->next;
+            delete temp;
+            head->prev= nullptr;
+            size--;
+        }
+    }
+    void removeAtTail(){
+        if (head == nullptr) cout << "list is already empty";
+        else{
+            nodeType *temp=tail;
+            tail=tail->prev;
+            delete temp;
+            tail->next= nullptr;
+            size--;
+        }
+    }
+    void removeAT(int index) {
+        if (index < 0 || index >= size){
+            cout << "invalid index\n";
+        } else if (index == 0) {
+            removeAtHead();
+        } else if (index == size - 1) {
+            removeAtTail();
+        } else {
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            temp->next->next = temp->next;
+            delete temp;
+            size--;
+            size--;
+        }
+    }
+    bool isEmpty(){
+        return head == nullptr;
+    }
+    int doubleLinkedListSize(){
+        return size;
+    }
+    t retrieveAt(int index) {
+        if (index < 0 || index >= size) cout << "invalid index\n";
+        else if (index == 0)return head->info;
+        else if (index == size - 1)return tail->info;
+        else{
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            return temp->info;
+
+        }
+    }
+    void print() const
+    {
+        nodeType *current; //pointer to traverse the list
+        current = head; //set current to point to the first node
+        while (current != NULL){
+            cout << current->value << " "; //output info
+            current = current->next;
+        }
+    }
+    void clear()
+    {
+        nodeType *temp; //pointer to delete the node
+        while (head != nullptr)
+        {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+        tail = nullptr;
+        size = 0;
+    }
+    void replaceAt (t newElement, int index){
+        if (index < 0 || index >= size){
+            cout << "invalid index\n";
+        } else if (index == 0) {
+            head->info = newElement;
+        } else if (index == size - 1) {
+            tail->info = newElement;
+        } else {
+            nodeType *temp = head;
+            for (int i = 0; i < index; ++i){
+                temp = temp->next;
+            }
+            temp->info = newElement;
+        }
+    }
+    bool isExist (t  element){
+        nodeType* temp = head;
+        for (int i = 0; i < size; ++i) {
+            if (temp->info == element)return true;
+            temp = temp->next;
+        }
+    }
+    bool isItemAtEqual (t  element, int index){
+        nodeType* temp = head;
+        for (int i = 0; i < index; ++i) {
+            temp = temp->next;
+        }
+        return temp->info == element;
+    }
+    void Swap(int idx1, int idx2)
+    {
+        if (idx1 == idx2)
+            return;
+        if (idx1 > idx2)swap(idx1, idx2);
+        nodeType* tmp = head;
+        nodeType* prev = NULL;
+        nodeType* next = head->next;
+
+        for (int i = 0; i < idx1 ; ++i) {
+            prev = tmp;
+            tmp = tmp->next;
+            next = tmp->next;
+        }
+
+        nodeType* tmp2 = head;
+        nodeType* prev2 = NULL;
+        nodeType* next2 = head->next;
+        for (int i = 0; i < idx2 ; ++i) {
+            prev2 = tmp2;
+            tmp2 = tmp2->next;
+            next2 = tmp2->next;
+        }
+        if (idx2 - idx1 == 1 )
+        {
+            if (size == 2)
+            {
+                head = tail;
+                tail = tmp;
+            }
+            else {
+
+                tmp2->next = tmp;
+                tmp->next = next2;
+                prev->next = tmp2;
+            }
+
+
+        }
+        else if (idx2 == size - 1 && idx1 == 0)
+        {
+            tmp2->next = tmp->next;
+            prev2->next = tmp;
+            tail = tmp;
+            head = tmp2;
+            tail->next=NULL;
+
+        }
+        else
+        {
+
+            tmp->next = next2;
+            tmp2->next = next;
+            prev->next = tmp2;
+            prev2->next = tmp;
+        }
+
+
+    }
+};
+int main() {
+    single_linked_list<int> list;
+    list.insertAtHead(33);
+    list.insertAtTail(44);
+    list.insertAtTail(21);
+    list.insertAT(12,1);
+    list.Swap(1,2);
+    list.print();
+}
+
+
+
