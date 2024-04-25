@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 class Student {
 private:
     string name;
@@ -29,23 +28,22 @@ int numberOfComparisons = 0;
 void Merge(Student students[],int numStudents,int x);
 int mergeSort(Student students[], int start, int end,int x);
 int merge(Student students[], int l, int mid, int r,int x);
-void countSort(Student input[],int numStudents);
-void count(Student students[],int numStudents);
+void quiksort(Student students[],int x);
 int partition_byGPA( Student students[],int l,int h);
-void quiksort_byGPA( Student students[],int l ,int h);
-int partition_byName( Student students[],int l,int h);
-void quiksort_byName( Student students[],int l ,int h);
+int  quiksort_byGPA( Student students[],int l ,int h);
+int partition_byName(Student students[], int l, int h);
+int  quiksort_byName( Student students[],int l ,int h);
 void Selection(Student students[],int numStudents,int x);
-int selectionSort(Student students[], int start, int end,int x);
+int selectionSort(Student students[], int end,int x);
 int selection(Student students[], int l, int mid);
 void Insertion(Student students[],int numStudents,int x);
-int insertionSort(Student students[], int start, int end,int x);
+int insertionSort(Student students[], int end,int x);
 int insertion(Student students[], int l, int mid);
 void Bubble(Student students[],int numStudents,int x);
-int bubbleSort(Student students[], int start, int end,int x);
+int bubbleSort(Student students[], int end,int x);
 int bubble(Student students[], int l, int mid);
 int main() {
-    ifstream inputFile("input.txt");
+    ifstream inputFile("in.txt");
     int numberOfStudents;
     inputFile >> numberOfStudents;
     inputFile.ignore();
@@ -63,12 +61,9 @@ int main() {
     }
     inputFile.close();
 
-    
-    Merge(students,numberOfStudents,1);
-    Count(students,numberOfStudents);
-    Selection(students,numberOfStudents,1);
-    Insertion(students,numberOfStudents,1);
-    Bubble(students,numberOfStudents,1);
+
+    Bubble(students,numberOfStudents,0);
+
     return 0;
 }
 void Merge(Student students[],int numStudents,int x)
@@ -125,11 +120,11 @@ int merge(Student students[], int l, int mid, int r,int x) {
         if(x)
         {
 
-        if (leftArray[i].getGpa() <= rightArray[j].getGpa()) {
-            students[k++] = leftArray[i++];
-        } else {
-            students[k++] = rightArray[j++];
-        }
+            if (leftArray[i].getGpa() <= rightArray[j].getGpa()) {
+                students[k++] = leftArray[i++];
+            } else {
+                students[k++] = rightArray[j++];
+            }
         }
         else
         {
@@ -150,37 +145,25 @@ int merge(Student students[], int l, int mid, int r,int x) {
 
     return comparisons;
 }
-void countSort(Student input[],int numStudents){
-    int arr[405]{};
-    Student ans[numStudents];
-    for(int i=0;i<numStudents;i++){
-        arr[(int)(input[i].getGpa*100)]++;
-    }
-    for(int i=1;i<405;i++)arr[i]=arr[i]+arr[i-1];
 
-    for(int i=0;i<numStudents;i++){
-        ans[--arr[(int)(input[i].getGpa()*100)]]=input[i];
-    }
-    return ans;
-}
-
-void count(Student students[],int numStudents)
+void quiksort_byGPA(Student students[],int x)
 {
+
+}
+void quiksort(Student students[],int numStudents,int x){
     ofstream outputFile;
-    
-    outputFile.open("SortedByGPA.txt");
+    if(!x)
+        outputFile.open("SortedByName.txt");
+    else
+        outputFile.open("SortedByGPA.txt");
 
     auto start = chrono::high_resolution_clock::now();
-     
-     countSort(students,numStudents);
-    
+    int numberOfComparisons = mergeSort(students, 0, numStudents - 1,x);
     auto end = chrono::high_resolution_clock::now();
-     
-    int numberOfComparisons = 0;
     chrono::duration<double> duration =end-start;
-    outputFile << "Count Sort\n";
+    outputFile << "quick Sort\n";
     outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
-    outputFile << "Running Time: " + to_string(duration.count())+ "numStudents";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
     outputFile << "Sorted Student Elements:\n";
     for (int i = 0; i < numStudents; ++i) {
         outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
@@ -192,49 +175,62 @@ int partition_byGPA( Student students[],int l,int h){
     Student p = students[l];
     int i = l;
     int j = h;
+   int  Comparisons=0;
     while (i < j){
         do {
             i++;
+            Comparisons++;
         } while (students[i].getGpa() <= p.getGpa());
         do {
             j--;
+            Comparisons++;
         } while (students[j].getGpa() > p.getGpa());
         if (i < j)
             swap(students[i],students[j]);
+        Comparisons++;
     }
     swap(students[l],students[j]);
     return j;
-};
-void quiksort_byGPA( Student students[],int l ,int h){
-    if (l < h){
-        int piv = partition_byGPA(students,l,h);
-        quiksort_byGPA(students,l,piv);
-        quiksort_byGPA(students,piv+1,h);
-    }
-    int partition_byName( Student students[],int l,int h){
-        Student p = students[l];
-        int i = l;
-        int j = h;
-        while (i < j){
-            do {
-                i++;
-            } while (students[i].getName() <= p.getName());
-            do {
-                j--;
-            } while (students[j].getName() > p.getName());
-            if (i < j)
-                swap(students[i],students[j]);
-        }
-        swap(students[l],students[j]);
-        return j;
-    }
-    void quiksort_byName( Student students[],int l ,int h){
-        if (l < h){
-            int piv = partition_byName(students,l,h);
-            quiksort_byName(students,l,piv);
-            quiksort_byName(students,piv+1,h);
-        }
 }
+int  quiksort_byGPA( Student students[],int l ,int h) {
+    if (l < h) {
+        int piv = partition_byGPA(students, l, h);
+        numberOfComparisons +=quiksort_byGPA(students, l, piv);
+        numberOfComparisons+=  quiksort_byGPA(students, piv + 1, h);
+    }
+    return numberOfComparisons;
+}
+int partition_byName(Student students[], int l, int h) {
+    Student p = students[l];
+    int i = l;
+    int j = h;
+            int  Comparisons=0;
+    while (i < j) {
+        do {
+            i++;
+            Comparisons++;
+        } while (students[i].getName() <= p.getName());
+        do {
+            j--;
+            Comparisons++;
+        } while (students[j].getName() > p.getName());
+        if (i < j)
+            swap(students[i], students[j]);
+        Comparisons++;
+    }
+    swap(students[l], students[j]);
+    return j;
+}
+int  quiksort_byName(Student students[], int l, int h) {
+    if (l < h) {
+        int piv = partition_byName(students, l, h);
+        numberOfComparisons+=quiksort_byName(students, l, piv);
+        numberOfComparisons+=quiksort_byName(students, piv + 1, h);
+    }
+        return numberOfComparisons;
+
+}
+
 int selectionSort(Student students[], int size,int x) {
     int comparisons = 0;
     comparisons += selection(students, size, x);
@@ -397,7 +393,7 @@ void Bubble(Student students[],int numStudents,int x)
     chrono::duration<double> duration =end-start;
     outputFile << "Bubble Sort\n";
     outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
-    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents ^2\n";
     outputFile << "Sorted Student Elements:\n";
     for (int i = 0; i < numStudents; ++i) {
         outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
