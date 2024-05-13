@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 #include "Item.h"
 #include "HeapSort.h"
+#include "avl.h"
 using namespace std;
 vector<Item>items;
 void get_input()
@@ -24,68 +25,81 @@ void get_input()
     inputFile.close();
 
 }
+
+
+void menu_avl() {
+
+    avl objName(1) ,objPrice(2);
+    for(auto&i:items)
+        {   
+            objName.Insert(i),
+            objPrice.Insert(i);
+        }
+    int choice=9;
+    while (choice) {
+
+        cout << "1. Add item data\n"
+             << "2. Remove item data\n"
+             << "3. Display the item data normally\n"
+             << "4. Display all the items sorted by their name (ascending)\n"
+             << "5. Display all the items sorted by their name (descending)\n"
+             << "6. Display all the items sorted by their prices (ascending)\n"
+             << "7. Display all the items sorted by their prices (descending)\n";
+
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::string name, cate;
+                int price;
+                cin >> name >> cate >> price;
+                Item x(name, price, cate);
+                objName.Insert(x);
+                objPrice.Insert(x);
+                break;
+            }
+            case 2:
+                break;
+            case 3:
+
+                break;
+            case 4:
+                objName.displayInOrder();
+                break;
+            case 5:
+                objName.displayPostOrder();
+                break;
+            case 6:
+                objPrice.displayPostOrder();
+                break;
+            case 7:
+                objPrice.displayInOrder();
+                break;
+            default:
+                break;
+        }
+        cout<<"\n";
+    }
+
+}
 void dispaly()
 {
-  cout<<"1-Heap sort with name Asec\n";
-  cout<<"2-Heap sort with name Desc\n";
-  cout<<"3-Heap sort with price Asec\n";
-  cout<<"4-Heap sort with price Desc\n";
+  cout<<"1-HEAP\n";
   cout<<"2-AVL\n";
   cout<<"3-Binary Search\n";
-
+  int choice;  
+  cin>>choice;
+  if(choice==1)
+     menu_Heap();  
+  else if(choice==2)
+      menu_avl();
+ else
+      menu_BinarySearch();
 
 }
 int main() {
     get_input();
-    int choice;
-    while(choice)
-    {
-        dispaly();
-        cin>>choice;
-
-        switch (choice) {
-            case 1:
-            {
-
-                SortByName *sort_by_name_Asec=new SortByName(2);
-                Build_Heap hp(items,sort_by_name_Asec);
-                hp.build();
-                hp.display();
-                break;
-            }
-            case 2:
-            {
-
-                SortByName *sort_by_name_Desc=new SortByName(1);
-                Build_Heap hp(items,sort_by_name_Desc);
-                hp.build();
-                hp.display();
-                break;
-            }
-            case 3:
-            {
-
-                SortByPrice *sort_by_price_Asec=new SortByPrice(2);
-                Build_Heap hp(items,sort_by_price_Asec);
-                hp.build();
-                hp.display();
-                break;
-            }
-            case 4:
-            {
-
-                SortByPrice *sort_by_price_Desc=new SortByPrice(1);
-                Build_Heap hp(items,sort_by_price_Desc);
-                hp.build();
-                hp.display();
-                break;
-            }
-            default:
-                break;
-
-        }
-        system("PAUSE");
-    }
+    display();
     return 0;
 }
 
