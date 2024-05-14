@@ -31,21 +31,21 @@ private:
         pre(te->right);
     }
 
-    void ascby_name_(node *te) {
+    void asc_by_name_(node *te) {
         if (te == nullptr) {
             return;
         }
-        asc(te->left);
+        asc_by_name(te->left);
         cout << te->data << " ";
-        asc(te->right);
+        asc_by_name(te->right);
     }
     void desc_by_name (node *te){
         if (te == nullptr) {
             return;
         }
-        desc(te->right);
+        desc_by_name(te->right);
         cout << te->data << " ";
-        desc(te->left);
+        desc_by_name(te->left);
 
     };
 
