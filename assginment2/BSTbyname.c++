@@ -1,5 +1,5 @@
 
-class BST {
+class BST_by_name {
     struct node {
         node *left, *right;
         t data;
@@ -31,7 +31,7 @@ private:
         pre(te->right);
     }
 
-    void asc(node *te) {
+    void ascby_name_(node *te) {
         if (te == nullptr) {
             return;
         }
@@ -39,7 +39,7 @@ private:
         cout << te->data << " ";
         asc(te->right);
     }
-    void desc (node *te){
+    void desc_by_name (node *te){
         if (te == nullptr) {
             return;
         }
