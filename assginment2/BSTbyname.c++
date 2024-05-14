@@ -1,10 +1,9 @@
-
 class BST_by_name {
     struct node {
         node *left, *right;
-        t data;
-        node() {
-            data = 0;
+        string data;
+        node(const Item& x) {
+            data = x.name;
             left = right = nullptr;
         }
     };
@@ -126,10 +125,10 @@ public:
     void insert(t item) {
         root = insert(root, item);
     }
-    t min_element(){
+    string min_element(){
         return mn(root)->data;
     }
-    t max_element(){
+    string max_element(){
         return mx(root)->data;
     }
     bool Isempty(){
