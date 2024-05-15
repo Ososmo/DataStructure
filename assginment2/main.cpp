@@ -31,10 +31,10 @@ void menu_avl() {
 
     avl objName(1) ,objPrice(2);
     for(auto&i:items)
-        {   
-            objName.Insert(i),
-            objPrice.Insert(i);
-        }
+    {
+        objName.Insert(i),
+                objPrice.Insert(i);
+    }
     int choice=9;
     while (choice) {
 
@@ -50,19 +50,41 @@ void menu_avl() {
 
         switch (choice) {
             case 1: {
-                std::string name, cate;
+                string name, cate;
                 int price;
                 cin >> name >> cate >> price;
                 Item x(name, price, cate);
                 objName.Insert(x);
                 objPrice.Insert(x);
+                items.push_back(x);
                 break;
             }
             case 2:
+            {
+                string name, cate;
+                int price;
+                cin >> name >> cate >> price;
+                Item x(name, price, cate);
+                for(auto i=items.begin();i<items.end();i++)
+                {
+                    if(i->itemname==x.itemname)
+                    {
+                        items.erase(i);
+                        break;
+                    }
+                }
+                objName.Remove(x);
+                objPrice.Remove(x);
                 break;
+            }
             case 3:
-
+            {
+                for(auto&i:items)
+                {
+                    cout<<i.itemname<<" "<<i.price<<" "<<i.category<<"\n";
+                }
                 break;
+            }
             case 4:
                 objName.displayInOrder();
                 break;
@@ -82,19 +104,19 @@ void menu_avl() {
     }
 
 }
-void dispaly()
+void display()
 {
-  cout<<"1-HEAP\n";
-  cout<<"2-AVL\n";
-  cout<<"3-Binary Search\n";
-  int choice;  
-  cin>>choice;
-  if(choice==1)
-     menu_Heap();  
-  else if(choice==2)
-      menu_avl();
- else
-      menu_BinarySearch();
+    cout<<"1-HEAP\n";
+    cout<<"2-AVL\n";
+    cout<<"3-Binary Search\n";
+    int choice;
+    cin>>choice;
+    if(choice==1)
+        menu_Heap();
+    else if(choice==2)
+        menu_avl();
+    else
+        menu_BinarySearch();
 
 }
 int main() {
@@ -102,9 +124,3 @@ int main() {
     display();
     return 0;
 }
-
-
-
-
-
-
