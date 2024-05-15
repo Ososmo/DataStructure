@@ -60,69 +60,27 @@ node* avl::insert(node* r, const Item& value) {
         return (new node(value));
     }
 
-    if (r == nullptr) {
-        return (new node(value));
-    }
 
     r->height = max(getHeight(r->left), getHeight(r->right)) + 1;
 
     int balance = getBalance(r);
-    if(order)
-    {
+    if(order) {
         if (value.itemname < r->data.itemname) {
             r->left = insert(r->left, value);
         } else if (value.itemname > r->data.itemname) {
             r->right = insert(r->right, value);
-        }
-        else
+        } else
             return r;
-        // Left Left Case
-        if (balance > 1 && value.itemname < r->left->data.itemname) {
-            return rightRotation(r);
-        }
-        // Right Right Case
-        if (balance < -1 && value.itemname > r->right->data.itemname) {
-            return leftRotation(r);
-        }
-        // Left Right Case
-        if (balance > 1 && value.itemname > r->left->data.itemname) {
-            r->left = leftRotation(r->left);
-            return rightRotation(r);
-        }
-        // Right Left Case
-        if (balance < -1 && value.itemname < r->right->data.itemname) {
-            r->right = rightRotation(r->right);
-            return leftRotation(r);
-        }
-    }
-    else
+    }else
     {
         if (value.price < r->data.price) {
             r->left = insert(r->left, value);
         } else if (value.price > r->data.price) {
             r->right = insert(r->right, value);
-        }
-        else
+        } else
             return r;
-        // Left Left Case
-        if (balance > 1 && value.price < r->left->data.price) {
-            return rightRotation(r);
-        }
-        // Right Right Case
-        if (balance < -1 && value.price > r->right->data.price) {
-            return leftRotation(r);
-        }
-        // Left Right Case
-        if (balance > 1 && value.price > r->left->data.price) {
-            r->left = leftRotation(r->left);
-            return rightRotation(r);
-        }
-        // Right Left Case
-        if (balance < -1 && value.price < r->right->data.price) {
-            r->right = rightRotation(r->right);
-            return leftRotation(r);
-        }
     }
+     r =fix(r,value);
 
     return r;
 }
@@ -157,6 +115,122 @@ void avl::displayInOrder() {
 void avl::displayPostOrder() {
 
     displayPostOrder(root);
+}
+
+node* avl::remove(node*head, const Item &value) {
+
+    if(head== NULL)
+        return nullptr;
+
+    if(order)
+    {
+        if(head->data.itemname > value.itemname)
+        {
+            head->left = remove(head->left,value);
+        }
+        else if(head->data.itemname > value.itemname)
+        {
+            head->right = remove(head->right,value);
+        }
+
+    }else
+    {
+        if(head->data.price > value.price)
+        {
+            head->left = remove(head->left,value);
+        }
+        else if(head->data.price > value.price)
+        {
+            head->right = remove(head->right,value);
+        }
+    }
+        if(head->left== NULL)
+        {
+            node*tmp=head->right;
+            delete head;
+            return tmp;
+        }
+        if(head->right== NULL)
+        {
+            node*tmp = head->left;
+            delete head ;
+            return tmp;
+        }
+        node* prev = head;
+        node* current = head->left;
+        while(current!=NULL && current->right!=NULL)
+        {
+            prev=current;
+            current=current->right;
+        }
+        head->data=current->data;
+        if(head!=prev)
+        {
+            prev->right = current->left;
+        }
+        else
+        {
+            prev->left = current->left;
+        }
+        delete current;
+
+       head = fix(head,value);
+     return head;
+
+}
+
+node *avl::fix(node*head ,const Item &value) {
+
+    head->height = max(getHeight(head->left), getHeight(head->right)) + 1;
+    int balance = getBalance(head);
+    if(order)
+    {
+        // Left Left Case
+        if (balance > 1 && value.itemname < head->left->data.itemname) {
+            return rightRotation(head);
+        }
+        // Right Right Case
+        if (balance < -1 && value.itemname > head->right->data.itemname) {
+            return leftRotation(head);
+        }
+        // Left Right Case
+        if (balance > 1 && value.itemname > head->left->data.itemname) {
+            head->left = leftRotation(head->left);
+            return rightRotation(head);
+        }
+        // Right Left Case
+        if (balance < -1 && value.itemname < head->right->data.itemname) {
+            head->right = rightRotation(head->right);
+            return leftRotation(head);
+        }
+    }
+    else
+    {
+
+        // Left Left Case
+        if (balance > 1 && value.price < head->left->data.price) {
+            return rightRotation(head);
+        }
+        // Right Right Case
+        if (balance < -1 && value.price > head->right->data.price) {
+            return leftRotation(head);
+        }
+        // Left Right Case
+        if (balance > 1 && value.price > head->left->data.price) {
+            head->left = leftRotation(head->left);
+            return rightRotation(head);
+        }
+        // Right Left Case
+        if (balance < -1 && value.price < head->right->data.price) {
+            head->right = rightRotation(head->right);
+            return leftRotation(head);
+        }
+    }
+    return head;
+}
+
+void avl::Remove(const Item &value) {
+    remove(root,value);
 }
 
 
